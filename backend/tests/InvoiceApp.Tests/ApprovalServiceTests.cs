@@ -303,4 +303,66 @@ public class ApprovalServiceTests
         Assert.Equal(new DateTime(2024, 1, 2, 3, 4, 5, DateTimeKind.Utc), invoice.DecidedAt);
         Assert.Equal("Awaiting second Director approval.", invoice.DecisionNote);
     }
+
+    [Fact]
+    public void Approve_RejectsBlankApprover_WithoutChangingInvoice()
+    {
+        var invoice = InvoiceWith("INV-1", InvoiceStatus.PendingApproval, 10_000m);
+        var service = ServiceFor(invoice);
+
+        Assert.Throws<ArgumentException>(
+            () => service.Approve("INV-1", " ", "Manager"));
+
+        Assert.Equal(InvoiceStatus.PendingApproval, invoice.Status);
+        Assert.Null(invoice.DecidedBy);
+        Assert.Null(invoice.DecidedAt);
+        Assert.Null(invoice.DecisionNote);
+    }
+
+    [Fact]
+    public void Submit_RejectsNonDraftInvoice_WithoutChangingInvoice()
+    {
+        var invoice = InvoiceWith("INV-1", InvoiceStatus.Approved);
+        invoice.DecidedBy = "director.one";
+        invoice.DecisionNote = "Already approved";
+        var service = ServiceFor(invoice);
+
+        Assert.Throws<InvalidOperationException>(
+            () => service.Submit("INV-1"));
+
+        Assert.Equal(InvoiceStatus.Approved, invoice.Status);
+        Assert.Equal("director.one", invoice.DecidedBy);
+        Assert.Equal("Already approved", invoice.DecisionNote);
+    }
+
+    [Fact]
+    public void Reject_RejectsNonPendingInvoice_WithoutChangingInvoice()
+    {
+        var invoice = InvoiceWith("INV-1", InvoiceStatus.Approved);
+        invoice.DecidedBy = "director.one";
+        invoice.DecisionNote = "Already approved";
+        var service = ServiceFor(invoice);
+
+        Assert.Throws<InvalidOperationException>(
+            () => service.Reject("INV-1", "director.two", "Duplicate"));
+
+        Assert.Equal(InvoiceStatus.Approved, invoice.Status);
+        Assert.Equal("director.one", invoice.DecidedBy);
+        Assert.Equal("Already approved", invoice.DecisionNote);
+    }
+
+    [Fact]
+    public void Reject_RequiresReason_WithoutChangingInvoice()
+    {
+        var invoice = InvoiceWith("INV-1", InvoiceStatus.PendingApproval);
+        var service = ServiceFor(invoice);
+
+        Assert.Throws<ArgumentException>(
+            () => service.Reject("INV-1", "director.one", " "));
+
+        Assert.Equal(InvoiceStatus.PendingApproval, invoice.Status);
+        Assert.Null(invoice.DecidedBy);
+        Assert.Null(invoice.DecidedAt);
+        Assert.Null(invoice.DecisionNote);
+    }
 }
