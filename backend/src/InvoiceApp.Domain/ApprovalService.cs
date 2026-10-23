@@ -1,11 +1,16 @@
 namespace InvoiceApp.Domain;
 
+using System.Globalization;
+
 /// <summary>
 /// Moves an invoice through its lifecycle: Draft -> PendingApproval -> Approved or Rejected.
 /// One invoice at a time, decided as a whole by a single approver.
 /// </summary>
 public class ApprovalService
 {
+    private const decimal ManagerLimit = 50_000m;
+    private const decimal DirectorLimit = 500_000m;
+
     private readonly IInvoiceRepository _repository;
 
     public ApprovalService(IInvoiceRepository repository)
@@ -28,10 +33,16 @@ public class ApprovalService
         return invoice;
     }
 
-    public Invoice Approve(string invoiceId, string approver)
+    public Invoice Approve(string invoiceId, string approver, string role)
     {
+        if (string.IsNullOrWhiteSpace(approver))
+        {
+            throw new ArgumentException("Approver is required.", nameof(approver));
+        }
+
         var invoice = Find(invoiceId);
         EnsurePending(invoice);
+        ValidateApprovalRoleAndAmount(role, invoice.Amount);
 
         invoice.Status = InvoiceStatus.Approved;
         invoice.DecidedBy = approver;
@@ -69,5 +80,33 @@ public class ApprovalService
             throw new InvalidOperationException(
                 $"Invoice {invoice.Id} is {invoice.Status}; only pending invoices can be decided.");
         }
+    }
+
+    private static void ValidateApprovalRoleAndAmount(string role, decimal amount)
+    {
+        if (string.Equals(role, "Manager", StringComparison.OrdinalIgnoreCase))
+        {
+            if (amount > ManagerLimit)
+            {
+                throw new InvalidOperationException(
+                    $"Managers may approve invoices up to {ManagerLimit.ToString("N0", CultureInfo.InvariantCulture)}. Invoice amount is {amount.ToString("N0", CultureInfo.InvariantCulture)}.");
+            }
+
+            return;
+        }
+
+        if (string.Equals(role, "Director", StringComparison.OrdinalIgnoreCase))
+        {
+            if (amount > DirectorLimit)
+            {
+                throw new InvalidOperationException(
+                    $"Directors may approve invoices up to {DirectorLimit.ToString("N0", CultureInfo.InvariantCulture)}. Invoice amount is {amount.ToString("N0", CultureInfo.InvariantCulture)}.");
+            }
+
+            return;
+        }
+
+        throw new InvalidOperationException(
+            "Approval is limited to Manager and Director roles.");
     }
 }
