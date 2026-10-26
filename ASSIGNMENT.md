@@ -11,13 +11,38 @@ Implemented role-based invoice approval rules in the Invoice Approval Demo App.
 
 ## 2. Unit Test Results
 
-The approval service unit tests passed during implementation. Record the final test count and date from the latest `dotnet test` run before submission.
+**Latest verified run:** 26 October 2026
 
-## 3. Playwright End-to-End Test
+Command:
 
-Added an E2E test covering a Manager attempting to approve a 50,001 invoice. The test verifies that an error is shown and the invoice remains pending without approval decision fields being changed.
+```powershell
+dotnet test .\backend\InvoiceApp.sln --nologo
+```
 
-Record the latest E2E test result before submission.
+Result:
+
+- Passed: 25
+- Failed: 0
+- Skipped: 0
+- Total: 25
+- Target framework: .NET 8 (`net8.0`)
+
+## 3. Playwright End-to-End Tests
+
+**Latest verified run:** 26 October 2026
+
+Command, run from the `e2e` directory:
+
+```powershell
+npx playwright test --project=chromium --reporter=list
+```
+
+Result: **2 passed, 0 failed.**
+
+Scenarios verified:
+
+1. **Manager over-limit rejection:** A Manager attempts to approve an invoice of 50,001. The test verifies that an error is displayed and the invoice remains pending without approval decision fields being changed.
+2. **High-value dual approval:** Two distinct Directors approve an invoice of 500,001. The test verifies that the first approval leaves the invoice pending, while the second Director's approval completes the workflow and records the distinct approvers.
 
 ## 4. Mutation Testing
 
@@ -52,7 +77,19 @@ The surviving mutants still require review to determine whether they represent m
 
 ## 5. AI-Assisted Development Evidence
 
-Document the actual agents, sub-agents, skills, hooks, and AI interactions used during the work. Include available logs and the purpose of each interaction. Do not claim tools or capabilities were used unless there is evidence.
+AI assistance was used for requirements guidance, OpenSpec planning, implementation and test design, evidence documentation, and independent review interactions.
+
+Evidence available in the repository includes:
+
+- `AGENTS.md` — repository guidance for role-based invoice approval and the development workflow.
+- `openspec/changes/role-based-invoice-approval/` — feature proposal, design, tasks, and specification.
+- `.github/prompts/` and `.github/skills/` — OpenSpec workflow prompts and skills.
+- `.mcp.json` — Playwright MCP configuration.
+- `docs/evidence/AI-INTERACTION-LOG.md` — recorded AI-assisted tasks, outcomes, and artifact references.
+
+Two separate Copilot Chat review interactions were reported during development. They are recorded as review interactions, not as autonomous agents or sub-agents.
+
+**Outstanding evidence:** Actual use of multiple independent agents or sub-agents has not been verified. A hook-generated interaction log has not been verified either. The presence of configuration files alone does not prove execution. These requirements remain pending until supported by actual evidence.
 
 ## 6. Pull Request Review
 
@@ -99,7 +136,21 @@ The initial review verdict was **Request changes**. Re-review the branch after a
 
 ## 7. Commits
 
-List the actual commit hashes and messages from `git log --oneline`.
+The following commits are present in the feature branch history, newest first:
+
+| Commit | Message |
+|---|---|
+| `8bbaf1e` | `test: cover high-value dual approval in Playwright` |
+| `9839fcd` | `test: strengthen high-value approval state assertions` |
+| `310c638` | `docs: update verified approval implementation tasks` |
+| `11d110c` | `docs: clean assignment evidence report` |
+| `4df4dd5` | `docs: fix approval role guidance` |
+| `3c07007` | `docs: add AI interaction evidence log` |
+| `f1eaf10` | `docs: align agent guidance and record review findings` |
+| `7d94176` | `test: strengthen approval validation and document evidence` |
+| `e81adea` | `test: cover manager over-limit rejection in Playwright` |
+| `fd2a81c` | `feat: require dual approval for high-value invoices` |
+| `fc12cc7` | `feat: enforce manager and director approval limits` |
 
 ## 8. Demo Video
 
