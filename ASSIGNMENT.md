@@ -56,7 +56,9 @@ Document the actual agents, sub-agents, skills, hooks, and AI interactions used 
 
 ## 6. Pull Request Review
 
-**Review verdict:** Request changes
+**Pull Request URL:** https://github.com/priyankas2001/ai-sdlc-invoice-approval-assignment/pull/1
+
+**Review verdict:** Request changes (initial review; final re-review pending)
 
 ### PR-01 — Documentation drift
 
@@ -64,14 +66,14 @@ Document the actual agents, sub-agents, skills, hooks, and AI interactions used 
 - **Location:** `AGENTS.md`, Conventions section
 - **Finding:** The existing guidance stated that approvals were restricted to Approver or Admin, conflicting with the implemented Manager and Director policy.
 - **Verdict:** Fixed — the approval guidance was updated to match the feature's role model.
-- **Verification:** Review the updated `AGENTS.md` diff before committing.
+- **Verification:** Confirm the current `AGENTS.md` wording and diff before final sign-off.
 
 ### PR-02 — Incomplete assignment evidence
 
 - **Severity:** High
 - **Location:** `ASSIGNMENT.md`
 - **Finding:** Required evidence was incomplete, including the AI interaction log, review record, pull request URL, and demo video URL.
-- **Verdict:** Deferred — the evidence package is still being completed. This finding must not be marked fixed until the required artifacts and links exist.
+- **Verdict:** Deferred — the evidence package is still being completed. Reassess this finding after all required artifacts and links exist.
 
 ### PR-Q1 — First approver for high-value invoices
 
@@ -93,7 +95,7 @@ These results are attributed to the review output and should be supported by the
 
 ### Final review status
 
-The initial review verdict was **Request changes**. Re-review the branch after addressing the findings and confirm the final verdict before submission.
+The initial review verdict was **Request changes**. Re-review the branch after addressing the findings and record the actual final verdict before submission.
 
 ## 7. Commits
 
