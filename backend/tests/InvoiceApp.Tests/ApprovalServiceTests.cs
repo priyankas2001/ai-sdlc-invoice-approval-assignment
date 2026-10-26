@@ -54,6 +54,9 @@ public class ApprovalServiceTests
         Assert.Equal(InvoiceStatus.PendingApproval, invoice.Status);
         Assert.Null(invoice.DecidedBy);
         Assert.Null(invoice.DecidedAt);
+        Assert.Null(invoice.DecisionNote);
+        Assert.Null(invoice.FirstApprover);
+        Assert.Null(invoice.SecondApprover);
     }
 
     [Fact]
@@ -364,5 +367,20 @@ public class ApprovalServiceTests
         Assert.Null(invoice.DecidedBy);
         Assert.Null(invoice.DecidedAt);
         Assert.Null(invoice.DecisionNote);
+    }
+
+    [Fact]
+    public void Director_Approve_HighValueInvoice_RemainsPendingAfterFirstApproval()
+    {
+        var invoice = InvoiceWith("INV-1", InvoiceStatus.PendingApproval, 500_001m);
+        var service = ServiceFor(invoice);
+
+        var result = service.Approve("INV-1", "director.one", "Director");
+
+        Assert.Equal(InvoiceStatus.PendingApproval, result.Status);
+        Assert.Equal("director.one", result.FirstApprover);
+        Assert.Null(result.SecondApprover);
+        Assert.Equal("director.one", result.DecidedBy);
+        Assert.Equal("Awaiting second Director approval.", result.DecisionNote);
     }
 }
