@@ -179,6 +179,6 @@ The following commits are present in the feature branch history, newest first:
 
 ## 8. Demo Video
 
-Video link: Pending - the required 8-10 minute demo video has not yet been recorded and uploaded.
+**Demo video:** [Watch the AI in SDLC assignment demo](https://nagarro-my.sharepoint.com/:v:/p/priyanka_salal/IQBgnyEYI2BoQ5Prfw9J9VwvAaGud7ejTJgq8TIYR4tK-dA?e=86IC6c)
 
 The video should demonstrate the implementation, unit tests, Playwright E2E test, mutation-testing run, and relevant results.
