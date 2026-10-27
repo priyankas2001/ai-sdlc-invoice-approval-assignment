@@ -95,44 +95,67 @@ Two separate Copilot Chat review interactions were reported during development. 
 
 **Pull Request URL:** https://github.com/priyankas2001/ai-sdlc-invoice-approval-assignment/pull/1
 
-**Review verdict:** Request changes (initial review; final re-review pending)
+### Initial review
 
-### PR-01 — Documentation drift
+**Verdict:** Request changes.
+
+#### PR-01 — Documentation drift
 
 - **Severity:** Medium
-- **Location:** `AGENTS.md`, Conventions section
-- **Finding:** The existing guidance stated that approvals were restricted to Approver or Admin, conflicting with the implemented Manager and Director policy.
-- **Verdict:** Fixed — the approval guidance was updated to match the feature's role model.
-- **Verification:** Confirm the current `AGENTS.md` wording and diff before final sign-off.
+- **Finding:** The previous `AGENTS.md` guidance restricted approvals to Approver/Admin, conflicting with the implemented Manager/Director rules.
+- **Disposition:** Fixed.
+- **Evidence:** The current `AGENTS.md` specifies Manager and Director approval limits. The guidance was updated in commit `4df4dd5`.
 
-### PR-02 — Incomplete assignment evidence
+#### PR-02 - Incomplete assignment evidence
 
 - **Severity:** High
-- **Location:** `ASSIGNMENT.md`
-- **Finding:** Required evidence was incomplete, including the AI interaction log, review record, pull request URL, and demo video URL.
-- **Verdict:** Deferred — the evidence package is still being completed. Reassess this finding after all required artifacts and links exist.
+- **Finding:** The assignment evidence package was incomplete.
+- **Disposition:** Still open.
+- **Evidence:** The report and AI interaction log have been updated, but the demo video has not yet been uploaded. Actual agent/sub-agent and hook execution remains unverified.
 
-### PR-Q1 — First approver for high-value invoices
+#### PR-Q1 - First approver for high-value invoices
 
 - **Severity:** Medium
-- **Location:** `openspec/changes/role-based-invoice-approval/design.md`
-- **Finding:** The original requirement does not explicitly state which role may provide the first approval for invoices above 500,000.
-- **Verdict:** Deferred — confirm the business rule before final sign-off. The current implementation assumes a Director can initiate the dual-approval workflow.
+- **Finding:** The requirement does not explicitly specify who may provide the first approval for invoices above 500,000.
+- **Disposition:** Still open; requires product clarification.
+- **Evidence:** `openspec/changes/role-based-invoice-approval/design.md` documents the assumption that a Director initiates the dual-approval workflow.
 
-### Review scope and reported test results
+### Fresh review
 
-The reviewer reported inspecting the approval service, invoice model, API authorization/session flow, unit tests, Playwright test, OpenSpec artifacts, agent guidance, and repository configuration.
+**Review date:** 26 October 2026
+**Verdict:** Needs clarification.
 
-The reviewer reported:
+The reviewer found no blocking defect against the five explicit approval rules in the reviewed domain logic and tests. However, the first-approver policy for invoices above 500,000 remains ambiguous, and the evidence package is not yet complete.
+
+#### Findings
+
+1. Medium - First approver policy remains ambiguous.
+   The design and implementation assume that a Director can initiate the dual-approval workflow. Product confirmation is required. Update the specification, design, and tests to match the confirmed rule.
+
+2. Medium - Assignment evidence remains incomplete.
+   The demo video has not yet been uploaded, and actual multi-agent/sub-agent and hook execution has not been verified. Record only evidence of activities that actually occurred.
+
+3. **No additional code defect identified against the explicit rules.**
+   The reviewer reported that the current domain checks and state-preservation assertions align with those rules. This does not resolve the outstanding product clarification.
+
+### Test evidence
+
+**Latest verified terminal results from the assignment workflow:**
+
+- Unit tests: 25 passed, 0 failed, 0 skipped.
+- Full Chromium Playwright suite: 2 passed, 0 failed.
+- Stryker.NET mutation score: 60.55% in the later recorded run.
+
+**Tests reported by the fresh reviewer:**
+
 - Unit tests: 24 passed, 0 failed.
-- Playwright E2E: 1 passed.
-- Mutation testing: not run by the reviewer; separate Stryker results are recorded in the Mutation Testing section.
+- Focused high-value dual-approval Playwright test: 1 passed, 0 failed.
 
-These results are attributed to the review output and should be supported by the corresponding terminal evidence where available.
+These are separate runs with different test scopes or points in the workflow; the results are recorded as reported rather than merged.
 
 ### Final review status
 
-The initial review verdict was **Request changes**. Re-review the branch after addressing the findings and record the actual final verdict before submission.
+The latest review verdict is **Needs clarification**. Final sign-off remains pending until the first-approver policy is confirmed and the required assignment evidence is complete.
 
 ## 7. Commits
 
@@ -140,6 +163,7 @@ The following commits are present in the feature branch history, newest first:
 
 | Commit | Message |
 |---|---|
+| `8fda2bc` | `docs: update assignment evidence and test results` |
 | `8bbaf1e` | `test: cover high-value dual approval in Playwright` |
 | `9839fcd` | `test: strengthen high-value approval state assertions` |
 | `310c638` | `docs: update verified approval implementation tasks` |
@@ -154,6 +178,6 @@ The following commits are present in the feature branch history, newest first:
 
 ## 8. Demo Video
 
-**Video link:** Add the final 8–10 minute demo video URL here after uploading it.
+Video link: Pending - the required 8-10 minute demo video has not yet been recorded and uploaded.
 
 The video should demonstrate the implementation, unit tests, Playwright E2E test, mutation-testing run, and relevant results.
