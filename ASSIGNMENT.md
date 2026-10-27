@@ -11,12 +11,12 @@ Implemented role-based invoice approval rules in the Invoice Approval Demo App.
 
 ## 2. Unit Test Results
 
-**Latest verified run:** 26 October 2026
+**Latest verified run:** 27 October 2026
 
 Command:
 
 ```powershell
-dotnet test .\backend\InvoiceApp.sln --nologo
+dotnet test .\backend\InvoiceApp.sln --configuration Release --no-build --nologo
 ```
 
 Result:
@@ -29,7 +29,7 @@ Result:
 
 ## 3. Playwright End-to-End Tests
 
-**Latest verified run:** 26 October 2026
+**Latest verified run:** 27 October 2026
 
 Command, run from the `e2e` directory:
 
